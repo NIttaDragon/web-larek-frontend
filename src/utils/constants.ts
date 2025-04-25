@@ -30,6 +30,8 @@ export const SETTINGS = {
         totalPrice: '.basket__price',
         orderButton: '.basket__button'
     },
+    basketCounter: '.header__basket-counter',
+    basketHeader: '.header__basket',
     basketTemplate: '#basket',
     basketItemTemplate: '#card-basket',
     order: {
@@ -40,7 +42,7 @@ export const SETTINGS = {
         errors: '.form__errors',
         paymentButtonOnline: 'button[name="card"]',
         paymentButtonCash: 'button[name="cash"]',
-        buttonActiveClass: 'button_alt'
+        buttonActiveClass: '.button_alt'
     },
     orderTemplate: '#order',
     contacts: {
@@ -61,6 +63,6 @@ export const SETTINGS = {
         container: '#modal-container',
         content: '.modal__content',
         closeButton: '.modal__close',
-        modalActiveClass: 'modal_active'
+        modalActiveClass: '.modal_active'
     }
 };
