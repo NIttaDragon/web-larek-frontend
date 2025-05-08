@@ -1,3 +1,5 @@
+import { IProduct } from "../types/models/Product";
+
 export function pascalToKebab(value: string): string {
     return value.replace(/([a-z0–9])([A-Z])/g, "$1-$2").toLowerCase();
 }
@@ -133,3 +135,16 @@ export function createElement<
     }
     return element;
 }
+
+export function isIProduct(obj: any): obj is IProduct {
+    return (
+      typeof obj === 'object' &&
+      obj !== null &&
+      typeof obj.id === 'string' &&
+      typeof obj.name === 'string' &&
+      typeof obj.category === 'string' &&
+      typeof obj.price === 'number' &&
+      typeof obj.image === 'string' &&
+      typeof obj.description === 'string'
+    );
+  }

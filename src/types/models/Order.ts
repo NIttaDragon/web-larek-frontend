@@ -4,6 +4,10 @@ export interface IOrder {
   email: string | null;
   phone: string | null;
 
-  validatePayment(): boolean;
-  validateContacts(): boolean;
+  // validatePayment(): boolean;
+  // validateContacts(): boolean;
+}
+
+export interface IOrderResult {
+  id: string;
 }

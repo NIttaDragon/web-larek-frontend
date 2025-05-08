@@ -6,29 +6,26 @@ import { IOrder } from "../../types/models/Order";
 
 export class OrderView implements IOrderView {
     private eventEmitter: EventEmitter;
-    private form: HTMLFormElement;
+    // private form: HTMLFormElement;
     private paymentButtons: HTMLElement;
     private addressInput: HTMLInputElement;
     private submitButton: HTMLButtonElement;
     private errors: HTMLElement;
+    private container: HTMLElement;
 
-    constructor(eventEmitter: EventEmitter) {
+    constructor(container: HTMLElement, eventEmitter: EventEmitter) {
+        this.container = container;
         this.eventEmitter = eventEmitter;
     }
 
     render(order: IOrder): HTMLElement {
-        const template = document.querySelector<HTMLTemplateElement>(SETTINGS.orderTemplate);
-        if (!template) {
-            throw new Error('Шаблон не найден');
-        }
-        const orderElement = cloneTemplate<HTMLElement>(template);
 
         // Инициализация элементов формы
-        this.form = ensureElement<HTMLFormElement>(SETTINGS.order.form, orderElement);
-        this.paymentButtons = ensureElement<HTMLElement>(SETTINGS.order.paymentButtons, this.form);
-        this.addressInput = ensureElement<HTMLInputElement>(SETTINGS.order.addressInput, this.form);
-        this.submitButton = ensureElement<HTMLButtonElement>(SETTINGS.order.submitButton, this.form);
-        this.errors = ensureElement<HTMLElement>(SETTINGS.order.errors, this.form);
+        // this.form = ensureElement<HTMLFormElement>(SETTINGS.order.form, orderElement);
+        this.paymentButtons = ensureElement<HTMLElement>(SETTINGS.order.paymentButtons, this.container);
+        this.addressInput = ensureElement<HTMLInputElement>(SETTINGS.order.addressInput, this.container);
+        this.submitButton = ensureElement<HTMLButtonElement>(SETTINGS.order.submitButton, this.container);
+        this.errors = ensureElement<HTMLElement>(SETTINGS.order.errors, this.container);
 
         // Обработчики событий
         this.paymentButtons.addEventListener('click', (event: Event) => {
@@ -44,12 +41,12 @@ export class OrderView implements IOrderView {
             this.eventEmitter.emit('order:validate');
         });
 
-        this.form.addEventListener('submit', (event) => {
+        this.container.addEventListener('submit', (event) => {
             event.preventDefault();
             this.eventEmitter.emit('order:submit');
         });
 
-        return orderElement;
+        return this.container;
     }
 
     // Методы для обновления состояния формы

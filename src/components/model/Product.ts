@@ -2,7 +2,7 @@ import { IProduct } from "../../types/models/Product";
 
 export class Product implements IProduct {
   id: string;
-  name: string;
+  title: string;
   category: string;
   price: number;
   image: string;
@@ -10,7 +10,7 @@ export class Product implements IProduct {
 
   constructor(data: IProduct) {
       this.id = data.id;
-      this.name = data.name;
+      this.title = data.title;
       this.category = data.category;
       this.price = data.price;
       this.image = data.image;

@@ -92,7 +92,7 @@ yarn build
 - ```baseUrl: string``` - базовый URL API
 - ```options: RequestInit``` - настройки для fetch запросов
 
-Конструктор - инициализирует pаголовок ```'Content-Type': 'application/json'``` и дополнительные переданные заголовки.
+Конструктор - инициализирует заголовок ```'Content-Type': 'application/json'``` и дополнительные переданные заголовки.
 
 Методы:
 - ```handleResponse(response)``` - обрабатывает ответ сервера.

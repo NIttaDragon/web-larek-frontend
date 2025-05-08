@@ -10,24 +10,20 @@ export class ContactsView implements IContactsView {
     private phoneInput: HTMLInputElement;
     private submitButton: HTMLButtonElement;
     private errors: HTMLElement;
+    private container: HTMLElement;
 
-  constructor(eventEmitter: EventEmitter) {
-      this.eventEmitter = eventEmitter;
+  constructor(container: HTMLElement, eventEmitter: EventEmitter) {
+    this.eventEmitter = eventEmitter;
+    this.container = container;
+    // console.log(this.container);
+    // console.log(this.container.querySelector('form[name="contacts"]'));
+    // this.form = ensureElement<HTMLFormElement>(SETTINGS.contacts.form, this.container);
+    this.emailInput = ensureElement<HTMLInputElement>(SETTINGS.contacts.emailInput,this.container);
+    this.submitButton = ensureElement<HTMLButtonElement>(SETTINGS.contacts.submitButton, this.container);
+    this.errors = ensureElement<HTMLElement>(SETTINGS.contacts.errors, this.container);
   }
 
   render(): HTMLElement {
-    const template = document.querySelector<HTMLTemplateElement>(SETTINGS.contactsTemplate);
-    if (!template) {
-        throw new Error('Шаблон не найден');
-    }
-    const contacts = cloneTemplate<HTMLElement>(template);
-
-    this.form = ensureElement<HTMLFormElement>(SETTINGS.contacts.form, contacts);
-    this.emailInput = ensureElement<HTMLInputElement>(SETTINGS.contacts.emailInput, this.form);
-    this.phoneInput = ensureElement<HTMLInputElement>(SETTINGS.contacts.phoneInput, this.form);
-    this.submitButton = ensureElement<HTMLButtonElement>(SETTINGS.contacts.submitButton, this.form);
-    this.errors = ensureElement<HTMLElement>(SETTINGS.contacts.errors, this.form);
-
     this.emailInput.addEventListener('input', () => {
         this.eventEmitter.emit('contacts:validate');
     });
@@ -44,6 +40,6 @@ export class ContactsView implements IContactsView {
         });
     });
 
-    return contacts;
+    return this.container;
   }
 }

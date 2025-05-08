@@ -4,56 +4,56 @@ import { EventEmitter } from "../base/events";
 import { SETTINGS } from "../../utils/constants";
 import { IProduct } from "../../types/models/Product";
 import { Product } from "../model/Product";
-import { Modal } from "../view/Modal";
+import { Modal } from "../common/modal";
 import { IProductCardView } from "../../types/views/ProductCardView";
 import { IProductModalView } from "../../types/views/ProductModalView";
 import { ProductCardView } from "../view/ProductCardView";
 import { ProductModalView } from "../view/ProductModalView";
+import { ProductAPI } from "../productApi";
+import { PageView } from "../view/PageView";
+import { ModalController } from "./modalController";
 
-export class ProductController implements IProductController {
-  private api: Api;
-    private eventEmitter: EventEmitter;
-    private productCardView: IProductCardView;
-    private productModalView: IProductModalView;
-    private modal: Modal;
+export class ProductController {
+    private api: ProductAPI;
+    private events: EventEmitter;
+    private pageView: PageView;
+    private modal: ModalController;
 
-    constructor(api: Api, eventEmitter: EventEmitter) {
+    constructor(api: ProductAPI, events: EventEmitter, pageView: PageView, modal: ModalController) {
         this.api = api;
-        this.eventEmitter = eventEmitter;
-        this.productCardView = new ProductCardView();
-        this.productModalView = new ProductModalView(eventEmitter);
-        this.modal = new Modal();
+        this.events = events;
+        this.pageView = pageView;
+        this.modal = modal;
+        this.events.on('product:open', this.handleProductOpen.bind(this));
     }
 
-  async loadProducts(): Promise<void> {
-      try {
-          const data: any = await this.api.get('/products'); // Замените на реальный URI
-          const products: IProduct[] = data.items.map((item: IProduct) => new Product(item));
+    async loadProducts() {
+        try {
+            const products = await this.api.getProductList();
+            this.displayProducts(products);
+        } catch (error) {
+            console.error("Ошибка при загрузке товаров:", error);
+        }
+    }
 
-          const gallery = document.querySelector(SETTINGS.gallerySelector);
+    displayProducts(products: IProduct[]) {
+        const cards = products.map(product => {
+            const cardView = new ProductCardView();
+            const card = cardView.render(product);
+            card.addEventListener('click', () => {
+              this.events.emit('product:open', product);
+          });
+            return card;
+        });
+        this.pageView.updateGallery(cards);
+    }
 
-          if (gallery) {
-              products.forEach(product => {
-                  const card = this.productCardView.render(product);
-                  gallery.appendChild(card);
-                  card.addEventListener('click', () => this.showProductModal(product.id));
-              });
-          } else {
-              console.error('Gallery element not found.');
-          }
+    handleProductOpen(product: IProduct) {
+        const productModalView = new ProductModalView(this.events);
+        this.modal.openModal(productModalView.render(product));
+    }
 
-      } catch (error) {
-          console.error('Error loading products:', error);
-      }
-  }
-
-  showProductModal(productId: string): void {
-    this.api.get(`/products/${productId}`)
-        .then((productData: any) => {
-            const product = new Product(productData);
-            const modalContent = this.productModalView.render(product);
-            this.modal.open(modalContent);
-        })
-        .catch(error => console.error('Error fetching product details:', error));
-}
+    handleChangeState(product: IProduct) {
+        this.events.emit('product:changeState', { product });
+    }
 }

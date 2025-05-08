@@ -7,40 +7,43 @@ import { BasketCardView } from "./BasketCardView";
 
 export class BasketView implements IBasketView {
     private eventEmitter: EventEmitter;
-    private basketCard: BasketCardView;
+    private container: HTMLElement;
+    private list: HTMLElement;
+    private total: HTMLElement;
+    private button: HTMLElement;
 
-    constructor(eventEmitter: EventEmitter) {
+    constructor(container: HTMLElement, eventEmitter: EventEmitter) {
         this.eventEmitter = eventEmitter;
-        this.basketCard = new BasketCardView();
+        this.container = container;
+        this.list = this.container.querySelector(SETTINGS.basket.list);
+        this.total = this.container.querySelector(SETTINGS.basket.totalPrice);
+        this.button = this.container.querySelector(SETTINGS.basket.orderButton);
+        
     }
 
     render(basket: IBasket): HTMLElement {
-        const basketTemplate = document.querySelector<HTMLTemplateElement>(SETTINGS.basketTemplate);
-        if (!basketTemplate) {
-            throw new Error('Корзина не найдена');
-        }
-        const basketElement = cloneTemplate<HTMLElement>(basketTemplate);
-
-        const list = ensureElement<HTMLElement>(SETTINGS.basket.list, basketElement);
-        const totalPrice = ensureElement<HTMLElement>(SETTINGS.basket.totalPrice, basketElement);
-
-        list.innerHTML = '';
+        this.list.innerHTML = '';
+        if (basket.items.length === 0) {
+            const emptyMessage = document.createElement('div');
+            emptyMessage.textContent = 'Корзина пуста';
+            this.list.appendChild(emptyMessage);
+            this.button.setAttribute('disabled','');
+        } else {
         basket.items.forEach((product, index) => {
-            const itemElement = this.basketCard.render(product, index + 1);
+            this.button.removeAttribute('disabled');
+            let basketCard = new BasketCardView(cloneTemplate(ensureElement<HTMLTemplateElement>(SETTINGS.basketItemTemplate)), this.eventEmitter);
+            const itemElement = basketCard.render(product, index + 1);
             const deleteButton = itemElement.querySelector(SETTINGS.basket.itemDeleteButton);
-            deleteButton?.addEventListener('click', () => {
-                this.eventEmitter.emit('product:remove', { productId: product.id });
-            });
-            list.appendChild(itemElement);
+            
+            this.list.appendChild(itemElement);
         });
-
-        totalPrice.textContent = `${basket.totalPrice} синапсов`;
-
-        const orderButton = ensureElement<HTMLButtonElement>(SETTINGS.basket.orderButton, basketElement);
-        orderButton.addEventListener('click', () => {
+        this.button.addEventListener('click', () => {
             this.eventEmitter.emit('order:open');
         });
+        }
 
-        return basketElement;
+        this.total.textContent = `${basket.totalPrice} синапсов`;
+
+        return this.container;
     }
 }

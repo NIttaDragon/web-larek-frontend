@@ -6,35 +6,59 @@ import { IProduct } from "../../types/models/Product";
 
 export class ProductModalView implements IProductModalView {
   private eventEmitter: EventEmitter;
+  private isInBasket: boolean = false;
+    private product: IProduct;
+    private buyButton: HTMLButtonElement;
 
   constructor(eventEmitter: EventEmitter) {
       this.eventEmitter = eventEmitter;
   }
 
   render(product: IProduct): HTMLElement {
-      const productTemplate = document.querySelector<HTMLTemplateElement>(SETTINGS.productTemplate);
-      if (!productTemplate) {
-          throw new Error(`Template with ID "${SETTINGS.productTemplate}" not found.`);
-      }
+    this.product = product;
+      const productTemplate = ensureElement<HTMLTemplateElement>(SETTINGS.productTemplate);
       const productCard = cloneTemplate<HTMLElement>(productTemplate);
 
-      const titleElement = productCard.querySelector(SETTINGS.productSettings.title);
-      const categoryElement = productCard.querySelector(SETTINGS.productSettings.category);
-      const imageElement = productCard.querySelector(SETTINGS.productSettings.image) as HTMLImageElement;
-      const priceElement = productCard.querySelector(SETTINGS.productSettings.price);
-      const descriptionElement = productCard.querySelector(SETTINGS.productSettings.description);
-      const buyButton = productCard.querySelector(SETTINGS.productSettings.buyButton);
+      const titleElement = ensureElement<HTMLElement>(SETTINGS.productSettings.title, productCard);
+      const categoryElement = ensureElement<HTMLElement>(SETTINGS.productSettings.category, productCard);
+      const imageElement = ensureElement<HTMLElement>(SETTINGS.productSettings.image, productCard) as HTMLImageElement;
+      const priceElement = ensureElement<HTMLElement>(SETTINGS.productSettings.price, productCard);
+      const descriptionElement = ensureElement<HTMLElement>(SETTINGS.productSettings.description, productCard);
+      this.buyButton = ensureElement<HTMLButtonElement>(SETTINGS.productSettings.buyButton, productCard);
 
-      if (titleElement) titleElement.textContent = product.name;
-      if (categoryElement) categoryElement.textContent = product.category;
-      if (imageElement) imageElement.src = product.image;
-      if (priceElement) priceElement.textContent = `${product.price} синапсов`;
-      if (descriptionElement) descriptionElement.textContent = product.description;
+      titleElement.textContent = product.title;
+      categoryElement.textContent = product.category;
+      imageElement.src = product.image;
+      priceElement.textContent = `${product.price} синапсов`;
+      descriptionElement.textContent = product.description;
 
-      buyButton?.addEventListener('click', () => {
-        this.eventEmitter.emit('product:add', product);
-    });
-
+    this.updateButtonState();
     return productCard;
 }
+
+    setEventListenr(): void {
+        this.buyButton?.addEventListener('click', () => {
+            if (this.isInBasket){
+                // this.buyButton.textContent = 'Удалить';
+                this.setIsInBasket(false);
+                this.eventEmitter.emit('product:remove', {productId: this.product.id});                 
+                
+            } else {
+                // this.buyButton.textContent = 'В корзину';
+                this.setIsInBasket(true);
+                this.eventEmitter.emit('product:add', this.product);
+            }
+            this.updateButtonState();
+        });
+    }
+
+    setIsInBasket(isInBasket: boolean): void {
+        this.isInBasket = isInBasket;
+        this.updateButtonState();
+    }
+
+    private updateButtonState(): void {
+        if (!this.buyButton) return;
+        this.buyButton.textContent = this.isInBasket ? 'Удалить' : 'В корзину';
+    }
 }

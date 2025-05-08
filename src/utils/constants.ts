@@ -2,14 +2,10 @@ export const API_URL = `${process.env.API_ORIGIN}/api/weblarek`;
 export const CDN_URL = `${process.env.API_ORIGIN}/content/weblarek`;
 
 export const SETTINGS = {
-  gallerySelector: '.gallery',
+    page: '.page',
+    pageWrapper: '.page__wrapper',
+    gallerySelector: '.gallery',
     cardTemplate: '#card-catalog',
-    cardSettings: {
-        title: '.card__title',
-        category: '.card__category',
-        image: '.card__image',
-        price: '.card__price'
-    },
     productTemplate: '#card-preview',
     productSettings: {
         title: '.card__title',
@@ -35,7 +31,7 @@ export const SETTINGS = {
     basketTemplate: '#basket',
     basketItemTemplate: '#card-basket',
     order: {
-        form: 'form[name="order"]',
+        // form: 'form[name="order"]',
         paymentButtons: '.order__buttons',
         addressInput: 'input[name="address"]',
         submitButton: '.order__button',
@@ -46,7 +42,7 @@ export const SETTINGS = {
     },
     orderTemplate: '#order',
     contacts: {
-        form: 'form[name="contacts"]',
+        // form: 'form[name="contacts"]',
         emailInput: 'input[name="email"]',
         phoneInput: 'input[name="phone"]',
         submitButton: 'button[type="submit"]',
@@ -59,8 +55,9 @@ export const SETTINGS = {
         closeButton: '.order-success__close'
     },
     successTemplate: '#success',
+    modalContainer: '#modal-container',
     modal: {
-        container: '#modal-container',
+        container: '.modal__container',
         content: '.modal__content',
         closeButton: '.modal__close',
         modalActiveClass: '.modal_active'

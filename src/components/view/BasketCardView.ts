@@ -1,26 +1,34 @@
 import { IProduct } from "../../types/models/Product";
 import { cloneTemplate, ensureElement } from "../../utils/utils";
 import { SETTINGS } from "../../utils/constants";
+import { Component } from "../base/Component";
+import { EventEmitter } from "../base/events";
 
 export class BasketCardView {
-    private template: HTMLTemplateElement;
+    private container: HTMLElement;
+    private index: HTMLElement;
+    private title: HTMLElement;
+    private price: HTMLElement;
+    private button: HTMLButtonElement;
+    private eventEmitter: EventEmitter;
 
-    constructor() {
-        this.template = ensureElement<HTMLTemplateElement>(SETTINGS.basketItemTemplate);
+    constructor(container: HTMLElement, events: EventEmitter) {
+        this.container = container;
+        this.index = this.container.querySelector(SETTINGS.basket.itemIndex);
+        this.title = this.container.querySelector(SETTINGS.basket.itemTitle);
+        this.price = this.container.querySelector(SETTINGS.basket.itemPrice);
+        this.button = this.container.querySelector(SETTINGS.basket.itemDeleteButton);
+        this.eventEmitter = events;
     }
 
     render(product: IProduct, index: number): HTMLElement {
-        const card = cloneTemplate<HTMLElement>(this.template);
+        if (this.index) this.index.textContent = String(index);
+        if (this.title) this.title.textContent = product.title;
+        if (this.price) this.price.textContent = `${product.price} синапсов`;
+        this.button.addEventListener('click', () => {
+            this.eventEmitter.emit('product:remove', { productId: product.id });
+        });
 
-        const indexElement = card.querySelector(SETTINGS.basket.itemIndex);
-        const titleElement = card.querySelector(SETTINGS.basket.itemTitle);
-        const priceElement = card.querySelector(SETTINGS.basket.itemPrice);
-        const deleteButton = card.querySelector(SETTINGS.basket.itemDeleteButton);
-
-        if (indexElement) indexElement.textContent = String(index);
-        if (titleElement) titleElement.textContent = product.name;
-        if (priceElement) priceElement.textContent = `${product.price} синапсов`;
-
-        return card;
+        return this.container;
     }
 }

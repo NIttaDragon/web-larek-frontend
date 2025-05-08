@@ -4,46 +4,46 @@ import { Basket } from "../model/Basket";
 import { IProduct } from "../../types/models/Product";
 import { IBasketView } from "../../types/views/BasketView";
 import { BasketView } from "../view/BasketView";
-import { Modal } from "../view/Modal";
+import { Modal } from "../common/modal";
 import { SETTINGS } from "../../utils/constants";
+import { ModalController } from "./modalController";
 
-
-export class BasketController implements IBasketController {
+export class BasketController {
   private basket: Basket;
-  private eventEmitter: EventEmitter;
-  private basketView: IBasketView;
-  private modal: Modal;
+  private basketView: BasketView;
+  private events: EventEmitter;
+  private modalController: ModalController;
 
-  constructor(eventEmitter: EventEmitter) {
-    this.basket = new Basket();
-    this.eventEmitter = eventEmitter;
-    this.basketView = new BasketView(eventEmitter);
-    this.modal = new Modal();
+  constructor(basket: Basket, basketView: BasketView, events: EventEmitter, modalController: ModalController) {
+      this.basket = basket;
+      this.basketView = basketView;
+      this.events = events;
+      this.modalController = modalController;
 
-    this.eventEmitter.on('product:add', this.addToBasket.bind(this));
-    this.eventEmitter.on('product:remove', this.removeFromBasket.bind(this));
-    this.eventEmitter.on('basket:open', () => this.showBasket());
+      this.events.on('product:add', this.handleProductAdd.bind(this));
+      this.events.on('product:remove', this.handleProductRemove.bind(this));
+      this.events.on('basket:open', this.handleBasketOpen.bind(this));
   }
 
-  addToBasket(product: IProduct): void {
-    this.basket.addItem(product);
-    this.updateBasketIcon();
+  handleProductAdd(product: IProduct) {
+      this.basket.addItem(product);
+      this.updateBasketCounter();
+      this.events.emit('basket:changed'); // Сигнализируем об изменении корзины
+    }
+
+  handleProductRemove(data: { productId: string }) {
+      this.basket.removeItem(data.productId);
+      this.updateBasketCounter();
+      this.events.emit('basket:changed'); // Сигнализируем об изменении корзины
   }
 
-  removeFromBasket(productId: string): void {
-    this.basket.removeItem(productId);
-    this.updateBasketIcon();
+  handleBasketOpen() {
+      this.modalController.openModal(this.basketView.render(this.basket));
   }
 
-  showBasket(): void {
-    const basketContent = this.basketView.render(this.basket);
-    this.modal.open(basketContent);
-}
-
-  private updateBasketIcon(): void {
-      const basketCounter = document.querySelector(SETTINGS.basketCounter);
-      if (basketCounter) {
-          basketCounter.textContent = String(this.basket.items.length);
-      }
+  updateBasketCounter() {
+      const count = this.basket.items.length;
+      // Обновите счетчик в PageView или другом компоненте, отображающем счетчик
+      this.events.emit('basket:count', {count})
   }
 }
