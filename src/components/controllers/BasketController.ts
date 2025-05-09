@@ -28,13 +28,13 @@ export class BasketController {
   handleProductAdd(product: IProduct) {
       this.basket.addItem(product);
       this.updateBasketCounter();
-      this.events.emit('basket:changed'); // Сигнализируем об изменении корзины
+      this.events.emit('basket:changed'); 
     }
 
   handleProductRemove(data: { productId: string }) {
       this.basket.removeItem(data.productId);
       this.updateBasketCounter();
-      this.events.emit('basket:changed'); // Сигнализируем об изменении корзины
+      this.events.emit('basket:changed'); 
   }
 
   handleBasketOpen() {

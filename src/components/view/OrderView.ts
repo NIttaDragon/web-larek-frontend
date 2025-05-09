@@ -6,7 +6,6 @@ import { IOrder } from "../../types/models/Order";
 
 export class OrderView implements IOrderView {
     private eventEmitter: EventEmitter;
-    // private form: HTMLFormElement;
     private paymentButtons: HTMLElement;
     private addressInput: HTMLInputElement;
     private submitButton: HTMLButtonElement;
@@ -18,16 +17,15 @@ export class OrderView implements IOrderView {
         this.eventEmitter = eventEmitter;
     }
 
-    render(order: IOrder): HTMLElement {
-
-        // Инициализация элементов формы
-        // this.form = ensureElement<HTMLFormElement>(SETTINGS.order.form, orderElement);
+    render(): HTMLElement {
         this.paymentButtons = ensureElement<HTMLElement>(SETTINGS.order.paymentButtons, this.container);
         this.addressInput = ensureElement<HTMLInputElement>(SETTINGS.order.addressInput, this.container);
         this.submitButton = ensureElement<HTMLButtonElement>(SETTINGS.order.submitButton, this.container);
         this.errors = ensureElement<HTMLElement>(SETTINGS.order.errors, this.container);
+        return this.container;
+    }
 
-        // Обработчики событий
+    setListeners(): void {
         this.paymentButtons.addEventListener('click', (event: Event) => {
             const target = event.target as HTMLButtonElement;
             if (target.name === 'card' || target.name === 'cash') {
@@ -45,11 +43,8 @@ export class OrderView implements IOrderView {
             event.preventDefault();
             this.eventEmitter.emit('order:submit');
         });
-
-        return this.container;
     }
 
-    // Методы для обновления состояния формы
     setPaymentMethod(method: string): void {
         const onlineButton = ensureElement<HTMLButtonElement>(SETTINGS.order.paymentButtonOnline, this.paymentButtons);
         const cashButton = ensureElement<HTMLButtonElement>(SETTINGS.order.paymentButtonCash, this.paymentButtons);

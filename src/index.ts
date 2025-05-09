@@ -44,6 +44,7 @@ const productController = new ProductController(api, events, pageView, modalCont
 const basketController = new BasketController(basket, basketView, events, modalController);
 const orderController = new OrderController(order, orderView, contactsView, events, api, modalController, basket);
 
+
 let productModalView: ProductModalView;
 let currentProduct: IProduct;
 
@@ -60,7 +61,7 @@ events.on('product:open', (product: IProduct) => {
     productModalView.setIsInBasket(isInBasket);
     modal.content = productModalView.render(product);
     
-    productModalView.setEventListenr();
+    productModalView.setEventListener();
     modal.open();
   });
 

@@ -18,7 +18,6 @@ export class BasketView implements IBasketView {
         this.list = this.container.querySelector(SETTINGS.basket.list);
         this.total = this.container.querySelector(SETTINGS.basket.totalPrice);
         this.button = this.container.querySelector(SETTINGS.basket.orderButton);
-        
     }
 
     render(basket: IBasket): HTMLElement {

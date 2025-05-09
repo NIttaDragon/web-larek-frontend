@@ -17,13 +17,13 @@ export class ProductController {
     private api: ProductAPI;
     private events: EventEmitter;
     private pageView: PageView;
-    private modal: ModalController;
+    private modalController: ModalController;
 
     constructor(api: ProductAPI, events: EventEmitter, pageView: PageView, modal: ModalController) {
         this.api = api;
         this.events = events;
         this.pageView = pageView;
-        this.modal = modal;
+        this.modalController = modal;
         this.events.on('product:open', this.handleProductOpen.bind(this));
     }
 
@@ -50,10 +50,6 @@ export class ProductController {
 
     handleProductOpen(product: IProduct) {
         const productModalView = new ProductModalView(this.events);
-        this.modal.openModal(productModalView.render(product));
-    }
-
-    handleChangeState(product: IProduct) {
-        this.events.emit('product:changeState', { product });
+        this.modalController.openModal(productModalView.render(product));
     }
 }

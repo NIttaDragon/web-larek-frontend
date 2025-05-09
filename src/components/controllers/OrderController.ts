@@ -1,4 +1,3 @@
-// import { IOrderController } from "../../types/controllers/OrderController";
 import { Order } from "../model/Order";
 import { EventEmitter } from "../base/events";
 import { Basket } from "../model/Basket";
@@ -12,101 +11,6 @@ import { Modal } from "../common/modal";
 import { ModalController } from "./modalController";
 import { ProductAPI } from "../productApi";
 
-// export class OrderController /*implements IOrderController*/ {
-//     private order: Order;
-//     private eventEmitter: EventEmitter;
-//     private orderView: IOrderView;
-//     private contactsView: IContactsView;
-//     private successView: ISuccessView;
-//     private basket: Basket;
-//     private modal: Modal;
-
-//     constructor(eventEmitter: EventEmitter, modal: Modal) {
-//         this.order = new Order();
-//         this.eventEmitter = eventEmitter;
-//         this.basket = new Basket();
-//         this.modal = modal;
-//         this.orderView = new OrderView(eventEmitter);
-//         this.contactsView = new ContactsView(eventEmitter);
-//         this.successView = new SuccessView();
-
-//         this.registerEvents();
-//     }
-
-//     private registerEvents(): void {
-//         // Обработка открытия формы заказа
-//         this.eventEmitter.on('order:open', () => this.showOrderForm());
-
-//         // Изменение способа оплаты
-//         this.eventEmitter.on('payment:change', (data: { method: string }) => {
-//             this.order.paymentMethod = data.method;
-//             this.eventEmitter.emit('order:validate');
-//         });
-
-//         // Изменение адреса доставки
-//         this.eventEmitter.on('address:change', (data: { value: string }) => {
-//             this.order.deliveryAddress = data.value;
-//             this.eventEmitter.emit('order:validate');
-//         });
-
-//         // Валидация формы заказа
-//         this.eventEmitter.on('order:validate', () => {
-//             const isValid = this.order.validatePayment();
-//             this.orderView.setValidState(isValid);
-//         });
-
-//         // Отправка формы заказа
-//         this.eventEmitter.on('order:submit', () => {
-//             if (this.order.validatePayment()) {
-//                 this.modal.close();
-//                 this.showContactsForm();
-//             }
-//         });
-
-//         // Отправка контактных данных
-//         this.eventEmitter.on('contacts:submit', (data: { email: string; phone: string }) => {
-//             this.order.email = data.email;
-//             this.order.phone = data.phone;
-            
-//             if (this.order.validateContacts()) {
-//                 this.completeOrder();
-//             }
-//         });
-
-//         // Закрытие окна успешного заказа
-//         this.eventEmitter.on('success:close', () => {
-//             this.modal.close();
-//             this.resetOrder();
-//         });
-//     }
-
-//     private showOrderForm(): void {
-//         const orderContent = this.orderView.render(this.order);
-//         this.modal.open(orderContent);
-//     }
-
-//     private showContactsForm(): void {
-//         const contactsContent = this.contactsView.render();
-//         this.modal.open(contactsContent);
-//     }
-
-//     private completeOrder(): void {
-//         const successContent = this.successView.render(this.basket.totalPrice);
-//         this.modal.open(successContent);
-        
-//         // Настройка обработчика закрытия
-//         this.successView.getCloseButton().addEventListener('click', () => {
-//             this.eventEmitter.emit('success:close');
-//         });
-
-//         this.basket.clear();
-//         this.eventEmitter.emit('basket:clear');
-//     }
-
-//     private resetOrder(): void {
-//         this.order = new Order();
-//     }
-// }
 export class OrderController {
     private order: Order;
     private orderView: OrderView;
@@ -123,7 +27,7 @@ export class OrderController {
         this.events = events;
         this.api = api;
         this.modalController = modalController;
-        this.basket = basket
+        this.basket = basket;
 
         this.events.on('order:open', this.handleOrderOpen.bind(this));
         this.events.on('payment:change', this.handlePaymentChange.bind(this));
@@ -131,52 +35,71 @@ export class OrderController {
         this.events.on('contacts:submit', this.handleContactsSubmit.bind(this));
         this.events.on('order:submit', this.handleOrderSubmit.bind(this));
         this.events.on('contacts:validate', this.handleContactsValidate.bind(this));
+        this.events.on('order:validate', this.handleOrderValidate.bind(this));
     }
 
     handleOrderOpen() {
-        this.modalController.openModal(this.orderView.render(this.order));
+        this.modalController.openModal(this.orderView.render());
+        this.orderView.setListeners();
     }
 
     handlePaymentChange(data: { method: string }) {
-        this.order.paymentMethod = data.method;
+        this.order.payment = data.method;
         this.orderView.setPaymentMethod(data.method);
     }
 
     handleAddressChange(data: { value: string }) {
-        this.order.deliveryAddress = data.value;
+        this.order.address = data.value;
         this.orderView.setAddress(data.value);
+    }
+
+    handleOrderSubmit() {
+        this.order.payment 
+        this.modalController.openModal(this.contactsView.render());
+    }
+
+    handleContactsValidate() {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^\+?\d{1,4}[-.\s]?\(?\d{1,3}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
+        const isEmailValid = emailRegex.test(this.contactsView.emailInput.value);
+        const isPhoneValid = phoneRegex.test(this.contactsView.phoneInput.value);
+        const isValid = isEmailValid && isPhoneValid;
+
+        this.contactsView.setValidState(isValid, !isEmailValid ? 'Некорректный email' : (!isPhoneValid ? 'Некорректный телефон' : ''));
+    }
+
+    handleOrderValidate() {
+        const isValid = this.order.payment !== null && this.order.address !== null && this.order.address !== '';
+        this.orderView.setValidState(isValid);
     }
 
     handleContactsSubmit(data: { email: string, phone: string }) {
         this.order.email = data.email;
         this.order.phone = data.phone;
-    }
-
-    handleOrderSubmit() {
-        // Показываем форму контактов
-        this.modalController.openModal(this.contactsView.render());
-    }
-
-    handleContactsValidate() {
-        // Валидация контактов
+        this.handleOrderSubmitConfirmed();
     }
 
     async handleOrderSubmitConfirmed() {
         try {
-            // Отправляем заказ на сервер
-            // const result = await this.api.orderProducts(this.order);
-
-            // Если заказ успешно отправлен
+            const totalPrice = this.basket.totalPrice;
+        if (totalPrice>0) {
+            this.order.total = totalPrice;
+            this.order.items = [];
+            this.basket.items.forEach(item => {
+                this.order.items.push(item.id);
+                
+            });
+            
+            this.api.orderProducts(this.order);
             this.basket.clear();
-            this.events.emit('basket:changed'); // Обновляем корзину
+            this.events.emit('basket:changed'); 
             this.modalController.closeModal();
 
-            // Показываем сообщение об успехе
             const successView = new SuccessView();
-            this.modalController.openModal(successView.render(this.basket.totalPrice));
+            this.modalController.openModal(successView.render(totalPrice));
+        }
         } catch (error) {
             console.error("Ошибка при оформлении заказа:", error);
-            // Обработка ошибок
         }
     }
 }

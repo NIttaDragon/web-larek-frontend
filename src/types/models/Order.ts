@@ -1,11 +1,12 @@
+import { IProduct } from "./Product";
+
 export interface IOrder {
-  paymentMethod: string | null;
-  deliveryAddress: string | null;
+  payment: string | null;
+  address: string | null;
   email: string | null;
   phone: string | null;
-
-  // validatePayment(): boolean;
-  // validateContacts(): boolean;
+  total: number | null;
+  items: string[] | null;
 }
 
 export interface IOrderResult {

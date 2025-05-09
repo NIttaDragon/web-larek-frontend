@@ -31,18 +31,16 @@ export const SETTINGS = {
     basketTemplate: '#basket',
     basketItemTemplate: '#card-basket',
     order: {
-        // form: 'form[name="order"]',
         paymentButtons: '.order__buttons',
         addressInput: 'input[name="address"]',
         submitButton: '.order__button',
         errors: '.form__errors',
         paymentButtonOnline: 'button[name="card"]',
         paymentButtonCash: 'button[name="cash"]',
-        buttonActiveClass: '.button_alt'
+        buttonActiveClass: 'button_alt-active'
     },
     orderTemplate: '#order',
     contacts: {
-        // form: 'form[name="contacts"]',
         emailInput: 'input[name="email"]',
         phoneInput: 'input[name="phone"]',
         submitButton: 'button[type="submit"]',
