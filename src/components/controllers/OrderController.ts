@@ -1,13 +1,9 @@
 import { Order } from "../model/Order";
 import { EventEmitter } from "../base/events";
 import { Basket } from "../model/Basket";
-import { IOrderView } from "../../types/views/OrderView";
-import { IContactsView } from "../../types/views/ContactsView";
-import { ISuccessView } from "../../types/views/SuccessView";
 import { OrderView } from "../view/OrderView";
 import { ContactsView } from "../view/ContactsView";
 import { SuccessView } from "../view/SuccessView";
-import { Modal } from "../common/modal";
 import { ModalController } from "./modalController";
 import { ProductAPI } from "../productApi";
 
@@ -69,7 +65,7 @@ export class OrderController {
     }
 
     handleOrderValidate() {
-        const isValid = this.order.payment !== null && this.order.address !== null && this.order.address !== '';
+        const isValid = (this.order.payment !== null && this.order.address !== null && this.order.address !== '');
         this.orderView.setValidState(isValid);
     }
 
@@ -87,18 +83,22 @@ export class OrderController {
             this.order.items = [];
             this.basket.items.forEach(item => {
                 this.order.items.push(item.id);
-                
             });
             
             await this.api.orderProducts(this.order);
             this.basket.clear();
             this.events.emit('basket:changed'); 
             this.modalController.closeModal();
+            this.orderView.resetForm();
+            this.contactsView.resetForm();
 
             const successView = new SuccessView();
             this.modalController.openModal(successView.render(totalPrice));
         }
         } catch (error) {
+            let errorView = document.createElement('p');
+            errorView.textContent = 'Ошибка при оформлении заказа:' + error;
+            this.modalController.openModal(errorView);
             console.error("Ошибка при оформлении заказа:", error);
         }
     }

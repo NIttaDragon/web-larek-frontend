@@ -110,24 +110,7 @@ yarn build
 
 Содержит поля данных корзины, товаров, заказа, ошибки, загрузку.
 
-### 6. Отображение страницы ```src/components/page.ts```
-
-Класс Page - реализует логику работы главной страницы.
-
-Поля:
-- ```_counter``` - счётчик корзины
-- ```_catalog``` - каталог товаров
-- ```_wrapper``` - обёртка страницы
-- ```_basket``` - иконка корзины
-
-Конструктор находит все элементы на странице, добавляет обработчик открытия модального окна на иконку корзины
-
-Методы:
-- ```set counter(value: number)``` - обновляет счётчик корзины
-- ```set catalog(items: HTMLElement[])``` - обновляет содержимое католога товаров
-- ```set locked(value: boolean)``` - блокирует/отменяет блокировку страницы
-
-### 7. Работа с API-сервером для продуктов и заказов```src/components/productApi.ts```
+### 6. Работа с API-сервером для продуктов и заказов```src/components/productApi.ts```
 
 Класс ProductApi - наследуется от класса Api и реализует конкретные методы для работы с Api.
 
@@ -138,7 +121,7 @@ yarn build
 - ```getProductList(): Promise<IProduct[]>``` - получение списка товаров
 - ```orderProducts(order: IOrder): Promise<IOrderResult>``` - отправка данных заказа
 
-### 8. Модальные окна ```src/components/view/Modal.ts```
+### 7. Модальные окна ```src/components/view/Modal.ts```
 
 Класс, отвечающий за отображение модального окна.
 
@@ -178,11 +161,12 @@ yarn build
 Модель заказа хранит информацию о способе оплаты, доставке и контактах покупателя. Используется как DTO (Data Transfer Object) для передачи данных о заказе.
 
 Поля класса:
-- ```payment: string | null = null``` - способ оплаты
-- ```address: string | null = null``` - адрес доставки
-- ```email: string | null = null``` - электронная почта
-- ```phone: string | null = null``` - телефон
+- ```payment: string | null``` - способ оплаты
+- ```address: string | null``` - адрес доставки
+- ```email: string | null``` - электронная почта
+- ```phone: string | null``` - телефон
 - ```items: string[] | null``` - список id товаров
+- ```total: number | null``` - общая стоимость
 
 ### 3. Модель товара ```src/components/models/Product.ts```
 
@@ -250,13 +234,14 @@ yarn build
 - ```render()``` - отображает форму контактов.
 Загружает шаблон формы. Находит все элементы формы. Добавляет оброботчики взаимодействия с элементами формы. Добавляет обработчик отправки формы.
 - ```setValidState(isValid: boolean, error?: string): void``` - отображение ошибок и блокировка кнопки далее
+- ```resetForm()``` - сбрасывает значения полей формы
 
 ### 4. Форма заказа ```src/components/views/OrderView.ts```
 
 Отображает форму выбора способа оплаты и ввода адреса.
 
 Поля класса:
-- Элементы формы: ```container```, ```paymentButtons```, ```addressInput```, ```submitButton```, ```errors```
+- Элементы формы: ```container```, ```paymentButtons```, ```onlineButton```, ```cashButton```, ```addressInput```, ```submitButton```, ```errors```
 - ```eventEmitter``` - объект EventEmitter для отправки событий
 
 Конструктор принимает объект событий и шаблон формы и сохраняет их в поля.
@@ -268,6 +253,7 @@ yarn build
 - ```setAddress(value: string): void``` - установка адреса доставки
 - ```setValidState(isValid: boolean, error?: string): void``` - установка состояния валидности формы
 - ```setListeners(): void``` - устанавливаются прослушиватели на поля и форму
+- ```resetForm()``` - сбрасывает значения полей формы и снимает активный класс с кнопок
 
 ### 5. Главная страницы ```src/components/view/PageView.ts```
 
@@ -277,13 +263,15 @@ yarn build
 - ```basketCounter: HTMLElement``` - элемент счетчика товаров в корзине.
 - ```basketButton: HTMLElement``` - кнопка открытия корзины
 - ```gallery: HTMLElement``` - элемент галереи товаров.
-- ```eventEmitter: EventEmitter``` - объект для управления событиями (например, открытие корзины).
+- ```eventEmitter: EventEmitter``` - объект для управления событиями (например, открытие корзины)
+- ```_wrapper``` - обёртка страницы
 
 Конструктор принимает на вход объект событий, сохраняет его в поле, получает DOM-элементы для остальных полей, добавляет обработчик события на кнопку корзины
 
 Методы:
 - ```setBasketCounter(value: number): void``` - установка значения счётчика корзины
 - ```updateGallery(cards: HTMLELEMENT[]): void``` - обновление галереи товаров
+- ```setlocked(value: boolean)``` - блокирует/отменяет блокировку страницы 
 
 ### 6. Карточка товара ```src/components/views/ProductCardView.ts```
 
@@ -291,7 +279,7 @@ yarn build
 
 Методы:
 - ```render(product: IProduct)``` - заполняет шаблон карточки товара.
-Создает карточку из шаблона. Заполняет данные товара (название, категория, цена, изображение). Возвращает готовый DOM-элемент.
+Создает карточку из шаблона. Заполняет данные товара (название, категория. цвет категории, цена, изображение). Возвращает готовый DOM-элемент.
 
 ### 7. Детали товара ```src/components/views/ProductModalView.ts```
 
@@ -335,9 +323,10 @@ yarn build
 
 Поля класса:
 - ```basket: Basket``` - модель корзины, хранит товары и общую стоимость.
-- ```eventEmitter: EventEmitter``` - объект для управления событиями (добавление, удаление товара, открытие корзины)
+- ```events: EventEmitter``` - объект для управления событиями (добавление, удаление товара, открытие корзины)
 - ```basketView: IBasketView``` - отображение корзины
 - ```modalController: ModalController``` - контроллер модального окна
+- ```basketRowTemplate: HTMLTemplateElement``` - шаблон строки корзины
 
 Конструктор принимает объекты событий, корзины, отображения корзины, контроллера модального окна, создаёт экземпляры для полей, подписывается на события добавления/удаления и открытия корзины.
 
@@ -346,6 +335,7 @@ yarn build
 - ```handleProductRemove(data: { productId: string })``` - удаляет товар из корзины по ID и обновляет счетчик в иконке корзины
 - ```handleBasketOpen()``` - метод для отображения содержимого в модальном окне корзины
 - ```updateBasketCounter()``` - метод для обновления счетчика товаров
+- ```createBasketRows(): HTMLElement[]``` - создаёт массив из HTMLElement строк корзины
 
 ### 2. Контроллер заказов ```src/components/controllers/OrderController.ts```
 
@@ -370,7 +360,7 @@ yarn build
 - ```handleOrderValidate()``` - валидация данных первого окна заказа
 - ```handleContactsValidate()``` - валидация данных второго окна заказа
 - ```handleContactsSubmit(data: { email: string, phone: string })``` - завершение ввода данных второго окна заказа
-- ```handleOrderSubmitConfirmed()``` - отправка данных заказ на сервер
+- ```handleOrderSubmitConfirmed()``` - отправка данных заказ на сервер. В случае успеха открывает модальное окно успеха, в случае ошибки выводит сообщение об ошибке
 
 ### 3. Контроллер товаров ```src/components/controllers/OrderController.ts```
 

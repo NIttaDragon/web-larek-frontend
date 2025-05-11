@@ -1,12 +1,5 @@
-import { IProductController } from "../../types/controllers/ProductController";
-import { Api } from "../base/api";
 import { EventEmitter } from "../base/events";
-import { SETTINGS } from "../../utils/constants";
 import { IProduct } from "../../types/models/Product";
-import { Product } from "../model/Product";
-import { Modal } from "../common/modal";
-import { IProductCardView } from "../../types/views/ProductCardView";
-import { IProductModalView } from "../../types/views/ProductModalView";
 import { ProductCardView } from "../view/ProductCardView";
 import { ProductModalView } from "../view/ProductModalView";
 import { ProductAPI } from "../productApi";

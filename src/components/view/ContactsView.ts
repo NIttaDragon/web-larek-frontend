@@ -22,7 +22,7 @@ export class ContactsView implements IContactsView {
 
   setValidState(isValid: boolean, error?: string): void {
     this.submitButton.disabled = !isValid;
-    this.errors.textContent = error || ''; // Отображаем ошибку или очищаем поле
+    this.errors.textContent = error || '';
   }
 
   render(): HTMLFormElement {
@@ -36,12 +36,15 @@ export class ContactsView implements IContactsView {
 
     this.container.addEventListener('submit', (event) => {
         event.preventDefault();
-        console.log('форма отправлена');
         this.eventEmitter.emit('contacts:submit', {
             email: this.emailInput.value,
             phone: this.phoneInput.value,
         });
     });
     return this.container;
+  }
+
+  resetForm() {
+    this.container.reset();
   }
 }

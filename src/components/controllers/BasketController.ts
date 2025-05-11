@@ -1,10 +1,7 @@
 import { EventEmitter } from "../base/events";
-import { IBasketController } from "../../types/controllers/BasketController";
 import { Basket } from "../model/Basket";
 import { IProduct } from "../../types/models/Product";
-import { IBasketView } from "../../types/views/BasketView";
 import { BasketView } from "../view/BasketView";
-import { Modal } from "../common/modal";
 import { SETTINGS } from "../../utils/constants";
 import { ModalController } from "./modalController";
 import { BasketCardView } from "../view/BasketCardView";
@@ -15,8 +12,6 @@ export class BasketController {
   private basketView: BasketView;
   private events: EventEmitter;
   private modalController: ModalController;
-  private basketCard: BasketCardView;
-//   private basketCardArray: HTMLElement;
   private basketRowTemplate: HTMLTemplateElement;
 
   constructor(basket: Basket, basketView: BasketView, events: EventEmitter, modalController: ModalController) {

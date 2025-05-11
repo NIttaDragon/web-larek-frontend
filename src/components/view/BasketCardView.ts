@@ -1,7 +1,5 @@
 import { IProduct } from "../../types/models/Product";
-import { cloneTemplate, ensureElement } from "../../utils/utils";
 import { SETTINGS } from "../../utils/constants";
-import { Component } from "../base/Component";
 import { EventEmitter } from "../base/events";
 
 export class BasketCardView {

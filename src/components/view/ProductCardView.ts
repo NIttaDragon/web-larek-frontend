@@ -16,7 +16,12 @@ export class ProductCardView implements IProductCardView {
       titleElement.textContent = product.title;
       categoryElement.textContent = product.category;
       imageElement.src = product.image;
-      priceElement.textContent = `${product.price} синапсов`;
+      if (product.price == null) {
+        priceElement.textContent = `бесценно`;
+      } else {
+        priceElement.textContent = `${product.price} синапсов`;
+      }
+      
 
       switch (product.category) {
         case 'софт-скил':

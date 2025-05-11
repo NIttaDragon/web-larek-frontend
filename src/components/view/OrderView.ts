@@ -1,8 +1,7 @@
 import { IOrderView } from "../../types/views/OrderView";
 import { EventEmitter } from "../base/events";
-import { ensureElement, cloneTemplate } from "../../utils/utils";
+import { ensureElement } from "../../utils/utils";
 import { SETTINGS } from "../../utils/constants";
-import { IOrder } from "../../types/models/Order";
 
 export class OrderView implements IOrderView {
     private eventEmitter: EventEmitter;
@@ -10,9 +9,11 @@ export class OrderView implements IOrderView {
     private addressInput: HTMLInputElement;
     private submitButton: HTMLButtonElement;
     private errors: HTMLElement;
-    private container: HTMLElement;
+    private container: HTMLFormElement;
+    private onlineButton: HTMLButtonElement;
+    private cashButton: HTMLButtonElement;
 
-    constructor(container: HTMLElement, eventEmitter: EventEmitter) {
+    constructor(container: HTMLFormElement, eventEmitter: EventEmitter) {
         this.container = container;
         this.eventEmitter = eventEmitter;
     }
@@ -22,6 +23,9 @@ export class OrderView implements IOrderView {
         this.addressInput = ensureElement<HTMLInputElement>(SETTINGS.order.addressInput, this.container);
         this.submitButton = ensureElement<HTMLButtonElement>(SETTINGS.order.submitButton, this.container);
         this.errors = ensureElement<HTMLElement>(SETTINGS.order.errors, this.container);
+        this.onlineButton = ensureElement<HTMLButtonElement>(SETTINGS.order.paymentButtonOnline, this.paymentButtons);
+        this.cashButton = ensureElement<HTMLButtonElement>(SETTINGS.order.paymentButtonCash, this.paymentButtons);
+
         return this.container;
     }
 
@@ -46,11 +50,8 @@ export class OrderView implements IOrderView {
     }
 
     setPaymentMethod(method: string): void {
-        const onlineButton = ensureElement<HTMLButtonElement>(SETTINGS.order.paymentButtonOnline, this.paymentButtons);
-        const cashButton = ensureElement<HTMLButtonElement>(SETTINGS.order.paymentButtonCash, this.paymentButtons);
-
-        onlineButton.classList.toggle(SETTINGS.order.buttonActiveClass, method === 'card');
-        cashButton.classList.toggle(SETTINGS.order.buttonActiveClass, method === 'cash');
+        this.onlineButton.classList.toggle(SETTINGS.order.buttonActiveClass, method === 'card');
+        this.cashButton.classList.toggle(SETTINGS.order.buttonActiveClass, method === 'cash');
     }
 
     setAddress(value: string): void {
@@ -60,5 +61,11 @@ export class OrderView implements IOrderView {
     setValidState(isValid: boolean, error?: string): void {
         this.submitButton.disabled = !isValid;
         this.errors.textContent = isValid ? '' : (error || 'Заполните все поля');
+    }
+
+    resetForm() {
+        this.container.reset();
+        this.onlineButton.classList.remove(SETTINGS.order.buttonActiveClass);
+        this.cashButton.classList.remove(SETTINGS.order.buttonActiveClass);
     }
 }

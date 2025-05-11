@@ -29,7 +29,13 @@ export class ProductModalView implements IProductModalView {
         titleElement.textContent = product.title;
         categoryElement.textContent = product.category;
         imageElement.src = product.image;
-        priceElement.textContent = `${product.price} синапсов`;
+        if (product.price == null) {
+            priceElement.textContent = `бесценно`;
+            this.buyButton.setAttribute('disabled', '');
+                this.setIsInBasket(false);
+          } else {
+            priceElement.textContent = `${product.price} синапсов`;
+          }
         descriptionElement.textContent = product.description;
 
         this.updateButtonState();

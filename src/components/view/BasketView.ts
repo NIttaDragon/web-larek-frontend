@@ -1,9 +1,7 @@
 import { IBasketView } from "../../types/views/BasketView";
 import { EventEmitter } from "../base/events";
-import { ensureElement, cloneTemplate } from "../../utils/utils";
 import { SETTINGS } from "../../utils/constants";
 import { IBasket } from "../../types/models/Basket";
-import { BasketCardView } from "./BasketCardView";
 
 export class BasketView implements IBasketView {
     private eventEmitter: EventEmitter;

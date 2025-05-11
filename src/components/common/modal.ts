@@ -24,6 +24,9 @@ export class Modal extends Component<IModalData> {
 
     open() {
         this.container.classList.add('modal_active');
+        let doc = document.documentElement;
+        this.container.style.top = (window.pageYOffset - doc.clientTop) + "px";
+        this.container.style.left = 0 + "px";
         this.events.emit('modal:open');
     }
 

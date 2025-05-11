@@ -8,7 +8,6 @@ import { Basket } from './components/model/Basket';
 import { BasketView } from './components/view/BasketView';
 import { OrderView } from './components/view/OrderView';
 import { ContactsView } from './components/view/ContactsView';
-import { Page } from './components/page';
 import { ProductCardView } from './components/view/ProductCardView';
 import { AppState } from './components/appData';
 import { IProduct } from './types/models/Product';
@@ -28,8 +27,7 @@ const events = new EventEmitter();
 const api = new ProductAPI(CDN_URL, API_URL);
 
 const pageElement = ensureElement<HTMLElement>(SETTINGS.page);
-const page = new Page(pageElement, events);
-const pageView = new PageView(events);
+const pageView = new PageView(pageElement, events);
 
 const modalTemplate = ensureElement<HTMLTemplateElement>(SETTINGS.modalContainer);
 const modal = new Modal(modalTemplate, events);
@@ -47,7 +45,7 @@ const orderController = new OrderController(order, orderView, contactsView, even
 
 
 let productModalView: ProductModalView;
-let currentProduct: IProduct;
+// let currentProduct: IProduct;
 
 productController.loadProducts();
 
@@ -56,7 +54,7 @@ events.on('basket:count', (data: {count: number}) => {
 });
 
 events.on('product:open', (product: IProduct) => {
-  currentProduct = product;
+  let currentProduct: IProduct = product;
     productModalView = new ProductModalView(events);
     const isInBasket = basket.items.some(item => item.id === product.id);
     productModalView.setIsInBasket(isInBasket);
@@ -76,6 +74,14 @@ window.addEventListener('load', () => {
 });
 
 events.on('basket:changed', () => {
-  
+  basketController.updateBasketCounter();
   basketView.render(basket, basketController.createBasketRows());
 })
+
+events.on('modal:open', () => {
+  pageView.setlocked(true);
+});
+
+events.on('modal:close', () => {
+  pageView.setlocked(false);
+});
