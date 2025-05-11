@@ -8,20 +8,14 @@ import { Basket } from './components/model/Basket';
 import { BasketView } from './components/view/BasketView';
 import { OrderView } from './components/view/OrderView';
 import { ContactsView } from './components/view/ContactsView';
-import { ProductCardView } from './components/view/ProductCardView';
-import { AppState } from './components/appData';
 import { IProduct } from './types/models/Product';
 import { ProductModalView } from './components/view/ProductModalView';
-import { SuccessView } from './components/view/SuccessView';
 import { Order } from './components/model/Order';
-import { Product } from './components/model/Product';
-import { Api } from './components/base/api';
 import { ModalController } from './components/controllers/modalController';
 import { ProductController } from './components/controllers/ProductController';
 import { BasketController } from './components/controllers/BasketController';
 import { OrderController } from './components/controllers/OrderController';
 import { PageView } from './components/view/PageView';
-import { BasketCardView } from './components/view/BasketCardView';
 
 const events = new EventEmitter();
 const api = new ProductAPI(CDN_URL, API_URL);
@@ -45,7 +39,6 @@ const orderController = new OrderController(order, orderView, contactsView, even
 
 
 let productModalView: ProductModalView;
-// let currentProduct: IProduct;
 
 productController.loadProducts();
 
@@ -85,3 +78,8 @@ events.on('modal:open', () => {
 events.on('modal:close', () => {
   pageView.setlocked(false);
 });
+
+// window.addEventListener('scroll', function() {
+//   console.log("Прокрутка по вертикали (Y):", window.pageYOffset);
+//   console.log("Прокрутка по вертикали (Y):", window.scrollY);
+// });

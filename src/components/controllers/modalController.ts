@@ -11,13 +11,11 @@ export class ModalController {
     }
 
     openModal(content: HTMLElement) {
-        this.events.emit('modal:open');
         this.modal.content = content;
         this.modal.open();
     }
 
     closeModal() {
-        this.events.emit('modal:close');
         this.modal.close();
     }
 }
