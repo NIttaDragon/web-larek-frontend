@@ -90,7 +90,7 @@ export class OrderController {
                 
             });
             
-            this.api.orderProducts(this.order);
+            await this.api.orderProducts(this.order);
             this.basket.clear();
             this.events.emit('basket:changed'); 
             this.modalController.closeModal();

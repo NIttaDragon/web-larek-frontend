@@ -22,6 +22,7 @@ import { ProductController } from './components/controllers/ProductController';
 import { BasketController } from './components/controllers/BasketController';
 import { OrderController } from './components/controllers/OrderController';
 import { PageView } from './components/view/PageView';
+import { BasketCardView } from './components/view/BasketCardView';
 
 const events = new EventEmitter();
 const api = new ProductAPI(CDN_URL, API_URL);
@@ -75,5 +76,6 @@ window.addEventListener('load', () => {
 });
 
 events.on('basket:changed', () => {
-  basketView.render(basket);
+  
+  basketView.render(basket, basketController.createBasketRows());
 })

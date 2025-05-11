@@ -20,26 +20,17 @@ export class BasketView implements IBasketView {
         this.button = this.container.querySelector(SETTINGS.basket.orderButton);
     }
 
-    render(basket: IBasket): HTMLElement {
+    render(basket: IBasket, basketCardArray: HTMLElement[]): HTMLElement {
         this.list.innerHTML = '';
         if (basket.items.length === 0) {
-            const emptyMessage = document.createElement('div');
-            emptyMessage.textContent = 'Корзина пуста';
-            this.list.appendChild(emptyMessage);
             this.button.setAttribute('disabled','');
         } else {
-        basket.items.forEach((product, index) => {
             this.button.removeAttribute('disabled');
-            let basketCard = new BasketCardView(cloneTemplate(ensureElement<HTMLTemplateElement>(SETTINGS.basketItemTemplate)), this.eventEmitter);
-            const itemElement = basketCard.render(product, index + 1);
-            const deleteButton = itemElement.querySelector(SETTINGS.basket.itemDeleteButton);
-            
-            this.list.appendChild(itemElement);
-        });
-        this.button.addEventListener('click', () => {
-            this.eventEmitter.emit('order:open');
-        });
+            this.button.addEventListener('click', () => {
+                this.eventEmitter.emit('order:open');
+            });
         }
+        this.list.replaceChildren(...basketCardArray);
 
         this.total.textContent = `${basket.totalPrice} синапсов`;
 
