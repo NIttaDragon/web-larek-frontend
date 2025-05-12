@@ -78,8 +78,3 @@ events.on('modal:open', () => {
 events.on('modal:close', () => {
   pageView.setlocked(false);
 });
-
-// window.addEventListener('scroll', function() {
-//   console.log("Прокрутка по вертикали (Y):", window.pageYOffset);
-//   console.log("Прокрутка по вертикали (Y):", window.scrollY);
-// });

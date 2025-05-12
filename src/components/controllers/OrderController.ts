@@ -92,7 +92,7 @@ export class OrderController {
             this.orderView.resetForm();
             this.contactsView.resetForm();
 
-            const successView = new SuccessView();
+            const successView = new SuccessView(this.events, this.modalController);
             this.modalController.openModal(successView.render(totalPrice));
         }
         } catch (error) {

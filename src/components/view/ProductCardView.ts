@@ -20,8 +20,7 @@ export class ProductCardView implements IProductCardView {
         priceElement.textContent = `бесценно`;
       } else {
         priceElement.textContent = `${product.price} синапсов`;
-      }
-      
+      } 
 
       switch (product.category) {
         case 'софт-скил':

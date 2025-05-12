@@ -38,6 +38,25 @@ export class ProductModalView implements IProductModalView {
           }
         descriptionElement.textContent = product.description;
 
+        console.log(product.category);
+
+        switch (product.category) {
+            case 'софт-скил':
+              categoryElement.classList.add('card__category_soft');
+              break;
+            case 'дополнительное':
+              categoryElement.classList.add('card__category_additional');
+              break;
+            case 'кнопка':
+              categoryElement.classList.add('card__category_button');
+              break;
+            case 'хард-скил':
+              categoryElement.classList.add('card__category_hard');
+              break;
+            default:
+              categoryElement.classList.add('card__category_other');
+          }
+
         this.updateButtonState();
         return productCard;
     }
