@@ -1,1 +1,143 @@
+/*! ../../utils/constants */
+
+/*! ../../utils/utils */
+
+/*! ../base/Component */
+
+/*! ../view/BasketCardView */
+
+/*! ../view/ProductCardView */
+
+/*! ../view/ProductModalView */
+
+/*! ../view/SuccessView */
+
+/*! ./base/api */
+
+/*! ./components/base/events */
+
+/*! ./components/common/modal */
+
+/*! ./components/controllers/BasketController */
+
+/*! ./components/controllers/OrderController */
+
+/*! ./components/controllers/ProductController */
+
+/*! ./components/controllers/modalController */
+
+/*! ./components/model/Basket */
+
+/*! ./components/model/Order */
+
+/*! ./components/productApi */
+
+/*! ./components/view/BasketView */
+
+/*! ./components/view/ContactsView */
+
+/*! ./components/view/OrderView */
+
+/*! ./components/view/PageView */
+
+/*! ./components/view/ProductModalView */
+
+/*! ./scss/styles.scss */
+
+/*! ./utils/constants */
+
+/*! ./utils/utils */
+
 /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
+
+/*!**********************!*\
+  !*** ./src/index.ts ***!
+  \**********************/
+
+/*!****************************!*\
+  !*** ./src/utils/utils.ts ***!
+  \****************************/
+
+/*!******************************!*\
+  !*** ./src/scss/styles.scss ***!
+  \******************************/
+
+/*!********************************!*\
+  !*** ./src/utils/constants.ts ***!
+  \********************************/
+
+/*!************************************!*\
+  !*** ./src/components/base/api.ts ***!
+  \************************************/
+
+/*!**************************************!*\
+  !*** ./src/components/productApi.ts ***!
+  \**************************************/
+
+/*!***************************************!*\
+  !*** ./src/components/base/events.ts ***!
+  \***************************************/
+
+/*!***************************************!*\
+  !*** ./src/components/model/Order.ts ***!
+  \***************************************/
+
+/*!****************************************!*\
+  !*** ./src/components/common/modal.ts ***!
+  \****************************************/
+
+/*!****************************************!*\
+  !*** ./src/components/model/Basket.ts ***!
+  \****************************************/
+
+/*!*****************************************!*\
+  !*** ./src/components/view/PageView.ts ***!
+  \*****************************************/
+
+/*!******************************************!*\
+  !*** ./src/components/base/Component.ts ***!
+  \******************************************/
+
+/*!******************************************!*\
+  !*** ./src/components/view/OrderView.ts ***!
+  \******************************************/
+
+/*!*******************************************!*\
+  !*** ./src/components/view/BasketView.ts ***!
+  \*******************************************/
+
+/*!********************************************!*\
+  !*** ./src/components/view/SuccessView.ts ***!
+  \********************************************/
+
+/*!*********************************************!*\
+  !*** ./src/components/view/ContactsView.ts ***!
+  \*********************************************/
+
+/*!***********************************************!*\
+  !*** ./src/components/view/BasketCardView.ts ***!
+  \***********************************************/
+
+/*!************************************************!*\
+  !*** ./src/components/view/ProductCardView.ts ***!
+  \************************************************/
+
+/*!*************************************************!*\
+  !*** ./src/components/view/ProductModalView.ts ***!
+  \*************************************************/
+
+/*!*******************************************************!*\
+  !*** ./src/components/controllers/OrderController.ts ***!
+  \*******************************************************/
+
+/*!*******************************************************!*\
+  !*** ./src/components/controllers/modalController.ts ***!
+  \*******************************************************/
+
+/*!********************************************************!*\
+  !*** ./src/components/controllers/BasketController.ts ***!
+  \********************************************************/
+
+/*!*********************************************************!*\
+  !*** ./src/components/controllers/ProductController.ts ***!
+  \*********************************************************/
